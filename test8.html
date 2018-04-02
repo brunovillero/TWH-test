@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" href="https://bootswatch.com/4/cerulean/bootstrap.min.css">
+	</head>
+	<body>
+		<div class="container">
+			<h1>Question 8</h1>
+			<form>
+				<div class="form-group">
+					<label for="value1">Value 1:</label>
+					<input type="text" class="form-control col-md-6" id="value1" aria-describedby="valueHelp1" placeholder="Number here">
+				</div>
+				<div class="form-group">
+					<label for="value2">Value 2:</label>
+					<input type="text" class="form-control col-md-6" id="value2" aria-describedby="valueHelp2" placeholder="Number here">
+				</div>
+				<div class="form-group">
+					<label for="selectOperation">Operation:</label>
+					<select class="form-control col-md-4" id="selectOperation" >
+					  <option>sum</option>
+					  <option>subtraction</option>
+					  <option>division</option>
+					  <option>multiplication</option>
+					</select>
+				</div>
+					<button type="button" class="btn btn-primary" onclick="sendData();">Calculate</button>
+			</form>
+				<div>
+					<h4 id="clickToShowRes" >Result: <span id="result"></span></h4>
+				</div>
+		</div>
+		<script>
+			function sendData(){
+				var getValue1 = document.getElementById('value1').value;
+				var getValue2 = document.getElementById('value2').value;
+				var getOperation = document.getElementById('selectOperation').value;
+				$.ajax(
+				{
+					url: "request.php",
+					type: "GET",
+					data: { 
+						values: [getValue1, getValue2],
+						operation: getOperation
+					},
+					datatype: "json"
+				}).done(function(data,textStatus,jqHXHR){
+				
+					var jsonRequest = JSON.parse(data);
+					
+					if(jsonRequest.status == "ok")
+					{
+						$("#result").html(jsonRequest.result);
+					}
+					else
+					{
+						$("#result").html(jsonRequest.status);
+					}
+					
+				});
+			}
+		</script>
+	</body>
+</html>
